@@ -15,17 +15,20 @@ export default function SearchShow() {
 
     let url = 'https://kitsu.io/api/edge/anime?filter[text]=cowboy%20bebop';
 
-    useEffect(() => {
+    function doCall() {
         axios.get(url, config).then((response) => {
             setStuff(response.data.data[0]);
-        })
-    }, [])
+        });
 
-    console.log(stuff);
+        console.log(stuff);
+    }
+
+
 
 
     return (
         <div>
+            <button className='text-5xl' onClick={() => doCall()}>try it </button>
             {stuff && <div>
                 <p className='text-3xl'>Title : {stuff.attributes.canonicalTitle}</p>
                 <br></br>
