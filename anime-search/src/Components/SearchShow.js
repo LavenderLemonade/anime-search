@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export default function SearchShow() {
 
-    const [stuff, setStuff] = useState(null);
+    const [stuff, setStuff] = useState([]);
 
     class AnimeInfo {
         constructor(title, synopsis, cover) {
@@ -33,17 +33,21 @@ export default function SearchShow() {
 
     function doCall() {
         axios.get(url, config).then((response) => {
-            setStuff(factory.createInfo({
-                title: response.data.data[0].attributes.canonicalTitle,
-                synopsis: response.data.data[0].attributes.synopsis,
-                cover: response.data.data[0].attributes.posterImage.large
-            }));
+            console.log('length of the data is ' + response.data.data.length);
+            for (let i = 0; i < response.data.data.length; i++) {
+                setStuff(stuff => [...stuff, factory.createInfo({
+                    title: response.data.data[i].attributes.canonicalTitle,
+                    synopsis: response.data.data[i].attributes.synopsis,
+                    cover: response.data.data[i].attributes.posterImage.large
+                })]);
+            }
+
         });
 
-        console.log(stuff);
+
     }
 
-
+    console.log(stuff);
 
 
 
