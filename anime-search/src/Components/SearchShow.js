@@ -55,14 +55,15 @@ export default function SearchShow() {
     return (
         <div>
             <button className='text-5xl' onClick={() => doCall()}>try it </button>
-            {stuff && <div>
-                <p className='text-3xl'>Title : {stuff.Title}</p>
-                <br></br>
-                <p className='text-3xl'> Synopsis: {stuff.Synopsis}</p>
-                <br></br>
-                <img src={stuff.Cover}></img>
-            </div>
-            }
+            {stuff && stuff.map((anime) =>
+                <div>
+                    <p className='text-3xl'>Title : {anime.Title}</p>
+                    <br></br>
+                    <p className='text-3xl'> Synopsis: {anime.Synopsis}</p>
+                    <br></br>
+                    <img src={anime.Cover}></img>
+                </div>
+            )}
 
         </div>
     )
