@@ -4,7 +4,9 @@ import axios from 'axios';
 
 export default function SearchShow() {
 
-    const [query, setQuery] = useState(null);
+    const [title, setTitle] = useState(null);
+    const [synopsis, setSynopsis] = useState(null);
+    const [episodes, setEpisodes] = useState(null);
 
     let config = {
         headers: {
@@ -13,18 +15,25 @@ export default function SearchShow() {
         }
     };
 
-    axios.get('https://kitsu.io/api/edge/anime?filter[text]=cowboy%20bebop', config).then((response) => {
-        setQuery(response.data.data[0].attributes.canonicalTitle);
+    let url = 'https://kitsu.io/api/edge/anime?filter[text]=cowboy%20bebop';
+
+    axios.get(url, config).then((response) => {
+        setTitle(response.data.data[0].attributes.canonicalTitle);
+        setSynopsis(response.data.data[0].attributes.synopsis);
+        setEpisodes(response.data.data[0].attributes.episodeCount);
+
     })
 
-    console.log(query);
+    console.log(title);
 
 
     return (
         <div>
-
-            <p className='text-3xl'>{query}</p>
-
+            <p className='text-3xl'>Title : {title}</p>
+            <br></br>
+            <p className='text-3xl'> Synopsis: {synopsis}</p>
+            <br></br>
+            <p className='text-3xl'> number of Episodes: {episodes}</p>
         </div>
     )
 }
