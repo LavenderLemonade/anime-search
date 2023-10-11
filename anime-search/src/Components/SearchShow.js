@@ -1,12 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import React from 'react'
 import axios from 'axios';
 
 export default function SearchShow() {
 
-    const [title, setTitle] = useState(null);
-    const [synopsis, setSynopsis] = useState(null);
-    const [episodes, setEpisodes] = useState(null);
+    const [stuff, setStuff] = useState(null);
 
     let config = {
         headers: {
@@ -17,23 +15,26 @@ export default function SearchShow() {
 
     let url = 'https://kitsu.io/api/edge/anime?filter[text]=cowboy%20bebop';
 
-    axios.get(url, config).then((response) => {
-        setTitle(response.data.data[0].attributes.canonicalTitle);
-        setSynopsis(response.data.data[0].attributes.synopsis);
-        setEpisodes(response.data.data[0].attributes.episodeCount);
+    useEffect(() => {
+        axios.get(url, config).then((response) => {
+            setStuff(response.data.data[0]);
+        })
+    }, [])
 
-    })
-
-    console.log(title);
+    console.log(stuff);
 
 
     return (
         <div>
-            <p className='text-3xl'>Title : {title}</p>
-            <br></br>
-            <p className='text-3xl'> Synopsis: {synopsis}</p>
-            <br></br>
-            <p className='text-3xl'> number of Episodes: {episodes}</p>
+            {stuff && <div>
+                <p className='text-3xl'>Title : {stuff.attributes.canonicalTitle}</p>
+                <br></br>
+                <p className='text-3xl'> Synopsis: {stuff.attributes.synopsis}</p>
+                <br></br>
+                <p className='text-3xl'> number of Episodes: {stuff.attributes.episodes}</p>
+            </div>
+            }
+
         </div>
     )
 }
