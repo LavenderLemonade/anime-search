@@ -5,9 +5,11 @@ import axios from 'axios';
 export default function SearchShow() {
 
     const [stuff, setStuff] = useState([]);
+    const [word, setWord] = useState('');
 
     class AnimeInfo {
-        constructor(title, synopsis, cover) {
+        constructor(id, title, synopsis, cover) {
+            this.Id = id;
             this.Title = title;
             this.Synopsis = synopsis;
             this.Cover = cover;
@@ -16,7 +18,7 @@ export default function SearchShow() {
 
     class InfoFactory {
         createInfo(props) {
-            return new AnimeInfo(props.title, props.synopsis, props.cover);
+            return new AnimeInfo(props.id, props.title, props.synopsis, props.cover);
         }
     }
 
@@ -29,34 +31,38 @@ export default function SearchShow() {
         }
     };
 
-    let url = 'https://kitsu.io/api/edge/anime?filter[text]=cowboy%20bebop';
+    let url = 'https://kitsu.io/api/edge/anime?filter[text]=';
+    let show = 'sword art';
+    let newurl = url + encodeURI(show);
 
-    function doCall() {
-        axios.get(url, config).then((response) => {
+    function doCall(searchWord) {
+        axios.get(url + encodeURI(word), config).then((response) => {
             console.log('length of the data is ' + response.data.data.length);
             for (let i = 0; i < response.data.data.length; i++) {
                 setStuff(stuff => [...stuff, factory.createInfo({
+                    id: response.data.data[i].id,
                     title: response.data.data[i].attributes.canonicalTitle,
                     synopsis: response.data.data[i].attributes.synopsis,
                     cover: response.data.data[i].attributes.posterImage.large
+
                 })]);
             }
+            console.log(response.data.data);
 
         });
 
 
     }
 
-    console.log(stuff);
-
-
-
-
     return (
         <div>
-            <button className='text-5xl' onClick={() => doCall()}>try it </button>
-            {stuff && stuff.map((anime) =>
-                <div>
+            <input
+                value={word}
+                onChange={e => setWord(e.target.value)}
+            />
+            <button className='text-5xl' onClick={() => doCall(word)}>try it </button>
+            {stuff && stuff.map((anime, id) =>
+                <div key={id}>
                     <p className='text-3xl'>Title : {anime.Title}</p>
                     <br></br>
                     <p className='text-3xl'> Synopsis: {anime.Synopsis}</p>
