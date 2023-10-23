@@ -36,7 +36,7 @@ export default function SearchShow() {
     let newurl = url + encodeURI(show);
 
     function doCall(searchWord) {
-        axios.get(url + encodeURI(word), config).then((response) => {
+        axios.get(url + encodeURI(searchWord), config).then((response) => {
             console.log('length of the data is ' + response.data.data.length);
             for (let i = 0; i < response.data.data.length; i++) {
                 setStuff(stuff => [...stuff, factory.createInfo({
@@ -61,15 +61,20 @@ export default function SearchShow() {
                 onChange={e => setWord(e.target.value)}
             />
             <button className='text-5xl' onClick={() => doCall(word)}>try it </button>
-            {stuff && stuff.map((anime, id) =>
-                <div key={id}>
-                    <p className='text-3xl'>Title : {anime.Title}</p>
-                    <br></br>
-                    <p className='text-3xl'> Synopsis: {anime.Synopsis}</p>
-                    <br></br>
-                    <img src={anime.Cover}></img>
-                </div>
-            )}
+
+            <div className='flex flex-wrap'>
+                {stuff && stuff.map((anime, id) =>
+                    <div className='max-w-sm p-3 m-2 border-black border-2 flex flex-col' key={id}>
+                        <p className='text-lg self-center '>{anime.Title}</p>
+                        <br></br>
+                        <img src={anime.Cover}></img>
+                        <br></br>
+                        <p className='text-sm'> Synopsis: {anime.Synopsis}</p>
+
+                    </div>
+                )}
+            </div>
+
 
         </div>
     )
