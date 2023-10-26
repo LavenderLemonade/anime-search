@@ -65,15 +65,18 @@ export default function SearchShow() {
             <div className='flex flex-wrap'>
                 {stuff && stuff.map((anime, id) =>
                     <div className='max-w-sm p-3 m-2 border-black border-2 flex flex-col' key={id}>
+                        <p> {id}</p>
                         <p className='text-lg self-center '>{anime.Title}</p>
                         <br></br>
                         <img src={anime.Cover}></img>
                         <br></br>
-                        <p className='text-sm'> Synopsis: {anime.Synopsis}</p>
+                        <p className='text-sm line-clamp-3'> Synopsis: {anime.Synopsis}</p>
 
                     </div>
                 )}
             </div>
+
+
 
 
         </div>
