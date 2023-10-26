@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import React from 'react'
 import axios from 'axios';
 
 export default function SearchShow() {
 
-    const [stuff, setStuff] = useState([]);
-    const [word, setWord] = useState('');
+    const [animeList, setAnimeList] = useState([]);
+    const [search, setSearch] = useState('');
 
     class AnimeInfo {
         constructor(id, title, synopsis, cover) {
@@ -16,13 +16,13 @@ export default function SearchShow() {
         }
     }
 
-    class InfoFactory {
+    class AnimeInfoFactory {
         createInfo(props) {
             return new AnimeInfo(props.id, props.title, props.synopsis, props.cover);
         }
     }
 
-    const factory = new InfoFactory();
+    const factory = new AnimeInfoFactory();
 
     let config = {
         headers: {
@@ -31,39 +31,31 @@ export default function SearchShow() {
         }
     };
 
-    let url = 'https://kitsu.io/api/edge/anime?filter[text]=';
-    let show = 'sword art';
-    let newurl = url + encodeURI(show);
+    let baseUrl = 'https://kitsu.io/api/edge/anime?filter[text]=';
 
     function doCall(searchWord) {
-        axios.get(url + encodeURI(searchWord), config).then((response) => {
-            console.log('length of the data is ' + response.data.data.length);
+        axios.get(baseUrl + encodeURI(searchWord), config).then((response) => {
             for (let i = 0; i < response.data.data.length; i++) {
-                setStuff(stuff => [...stuff, factory.createInfo({
+                setAnimeList(animeList => [...animeList, factory.createInfo({
                     id: response.data.data[i].id,
                     title: response.data.data[i].attributes.canonicalTitle,
                     synopsis: response.data.data[i].attributes.synopsis,
                     cover: response.data.data[i].attributes.posterImage.large
-
                 })]);
             }
-            console.log(response.data.data);
-
         });
-
-
     }
 
     return (
         <div>
             <input
-                value={word}
-                onChange={e => setWord(e.target.value)}
+                value={search}
+                onChange={e => setSearch(e.target.value)}
             />
-            <button className='text-5xl' onClick={() => doCall(word)}>try it </button>
+            <button className='text-5xl' onClick={() => doCall(search)}>try it </button>
 
             <div className='flex flex-wrap'>
-                {stuff && stuff.map((anime, id) =>
+                {animeList && animeList.map((anime, id) =>
                     <div className='max-w-sm p-3 m-2 border-black border-2 flex flex-col' key={id}>
                         <p> {id}</p>
                         <p className='text-lg self-center '>{anime.Title}</p>
@@ -75,10 +67,6 @@ export default function SearchShow() {
                     </div>
                 )}
             </div>
-
-
-
-
         </div>
     )
 }
