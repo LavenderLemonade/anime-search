@@ -7,6 +7,7 @@ import ModalPopup from './ModalPopup';
 export default function SearchShow() {
 
     const [animeList, setAnimeList] = useState([]);
+    const [currentAnime, setCurrentAnime] = useState(null);
     const [search, setSearch] = useState('');
     const [openModal, setOpenModal] = useState(false);
 
@@ -61,7 +62,7 @@ export default function SearchShow() {
                 {animeList && animeList.map((anime, id) =>
                     <div className='max-w-sm p-3 m-2 border-black border-2 flex flex-col' key={id}>
                         <p> {id}</p>
-                        <button onClick={() => setOpenModal(true)}>ModalOpen</button>
+                        <button onClick={() => { setOpenModal(true); setCurrentAnime(id); }}>ModalOpen</button>
                         <p className='text-lg self-center '>{anime.Title}</p>
                         <br></br>
                         <img src={anime.Cover}></img>
@@ -72,7 +73,14 @@ export default function SearchShow() {
                 )}
             </div>
 
-            <ModalPopup open={openModal} onClose={() => setOpenModal(false)} />
+            {openModal && createPortal(
+                <ModalPopup open={openModal}
+                    title={animeList[currentAnime].Title}
+                    image={animeList[currentAnime].Cover}
+                    synopsis={animeList[currentAnime].Synopsis}
+                    onClose={() => setOpenModal(false)} />, document.body
+            )}
+
         </div>
     )
 }
