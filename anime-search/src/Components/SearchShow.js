@@ -1,11 +1,14 @@
 import { useState } from 'react'
 import React from 'react'
 import axios from 'axios';
+import { createPortal } from 'react-dom';
+import ModalPopup from './ModalPopup';
 
 export default function SearchShow() {
 
     const [animeList, setAnimeList] = useState([]);
     const [search, setSearch] = useState('');
+    const [openModal, setOpenModal] = useState(false);
 
     class AnimeInfo {
         constructor(id, title, synopsis, cover) {
@@ -58,6 +61,7 @@ export default function SearchShow() {
                 {animeList && animeList.map((anime, id) =>
                     <div className='max-w-sm p-3 m-2 border-black border-2 flex flex-col' key={id}>
                         <p> {id}</p>
+                        <button onClick={() => setOpenModal(true)}>ModalOpen</button>
                         <p className='text-lg self-center '>{anime.Title}</p>
                         <br></br>
                         <img src={anime.Cover}></img>
@@ -67,6 +71,8 @@ export default function SearchShow() {
                     </div>
                 )}
             </div>
+
+            <ModalPopup open={openModal} onClose={() => setOpenModal(false)} />
         </div>
     )
 }
