@@ -53,22 +53,21 @@ export default function SearchShow() {
     return (
         <div>
             <input
+                className='outline outline-black'
                 value={search}
                 onChange={e => setSearch(e.target.value)}
             />
-            <button className='text-5xl' onClick={() => doCall(search)}>try it </button>
+            <button className='text-2xl' onClick={() => doCall(search)}> Search </button>
 
             <div className='flex flex-wrap'>
                 {animeList && animeList.map((anime, id) =>
                     <div className='max-w-sm p-3 m-2 border-black border-2 flex flex-col' key={id}>
-                        <p> {id}</p>
-                        <button onClick={() => { setOpenModal(true); setCurrentAnime(id); }}>ModalOpen</button>
                         <p className='text-lg self-center '>{anime.Title}</p>
                         <br></br>
                         <img src={anime.Cover}></img>
                         <br></br>
                         <p className='text-sm line-clamp-3'> Synopsis: {anime.Synopsis}</p>
-
+                        <button onClick={() => { setOpenModal(true); setCurrentAnime(id); }}>More Info...</button>
                     </div>
                 )}
             </div>
