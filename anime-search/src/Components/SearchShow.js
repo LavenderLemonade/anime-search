@@ -12,17 +12,21 @@ export default function SearchShow() {
     const [openModal, setOpenModal] = useState(false);
 
     class AnimeInfo {
-        constructor(id, title, synopsis, cover) {
+        constructor(id, title, synopsis, cover, episodes, rating, startDate, endDate) {
             this.Id = id;
             this.Title = title;
             this.Synopsis = synopsis;
             this.Cover = cover;
+            this.Episodes = episodes;
+            this.Rating = rating;
+            this.StartDate = startDate;
+            this.EndDate = endDate;
         }
     }
 
     class AnimeInfoFactory {
         createInfo(props) {
-            return new AnimeInfo(props.id, props.title, props.synopsis, props.cover);
+            return new AnimeInfo(props.id, props.title, props.synopsis, props.cover, props.episodes, props.rating, props.startDate, props.endDate);
         }
     }
 
@@ -44,11 +48,20 @@ export default function SearchShow() {
                     id: response.data.data[i].id,
                     title: response.data.data[i].attributes.canonicalTitle,
                     synopsis: response.data.data[i].attributes.synopsis,
-                    cover: response.data.data[i].attributes.posterImage.large
+                    cover: response.data.data[i].attributes.posterImage.large,
+                    episodes: response.data.data[i].attributes.episodeCount,
+                    rating: response.data.data[i].attributes.averageRating,
+                    startDate: response.data.data[i].attributes.startDate,
+                    endDate: response.data.data[i].attributes.endDate
+
                 })]);
             }
+
+            console.log(response.data.data[0].attributes);
         });
     }
+
+    console.log(animeList[0]);
 
     return (
         <div>
@@ -61,14 +74,18 @@ export default function SearchShow() {
 
             <div className='flex flex-wrap'>
                 {animeList && animeList.map((anime, id) =>
-                    <div className='max-w-sm p-3 m-2 border-black border-2 flex flex-col' key={id}>
-                        <p className='text-lg self-center '>{anime.Title}</p>
-                        <br></br>
+                    <div className='max-w-sm m-2 border-black border-2 flex flex-col' key={id}>
                         <img src={anime.Cover}></img>
+                        <p className='text-sm self-center'>{anime.Title}</p>
                         <br></br>
-                        <p className='text-sm line-clamp-3'> Synopsis: {anime.Synopsis}</p>
+                        <div className='flex w-full '>
+                            <p className='text-sm justify-self-start'> eps: {anime.Episodes}</p>
+                            <p className='text-sm justify-self-end'> Rating {anime.Rating}</p>
+                        </div>
+
                         <button onClick={() => { setOpenModal(true); setCurrentAnime(id); }}>More Info...</button>
                     </div>
+
                 )}
             </div>
 
